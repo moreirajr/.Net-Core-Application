@@ -1,2 +1,6 @@
 # .Net-Core-Application
-Web application using .Net Core 3.0 version.
+
+.Net Core 3.0
+Entity Framework Core
+DDD
+Mediator
