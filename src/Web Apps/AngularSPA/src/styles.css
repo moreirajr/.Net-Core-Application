@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {width: 80%; margin:auto;}
+.form-field {width: 400px; display: block !important;}
+button {margin-right: 10px !important;}
+.mat-slider {width: 400px;} 
+
+mat-sidenav {width: 280px; padding: 15px;}
+.main-content {padding: 20px;}
+.toolbar-spacer {flex: 1 1 auto;}
+
+.menu-content {display: block; padding:20px;}

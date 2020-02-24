@@ -1,0 +1,35 @@
+<div class="example-header" fxLayout="row">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  
+  <div class="example-container mat-elevation-z8">
+  
+    <mat-table [dataSource]="dataSource" matSort>
+  
+      <!-- ID Column -->
+      <ng-container matColumnDef="Id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Id"> {{row.Id}} </mat-cell>
+      </ng-container>
+  
+      <!-- Descricao Column -->
+      <ng-container matColumnDef="Descricao">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Descricao"> {{row.Descricao}} </mat-cell>
+      </ng-container>
+  
+      <!-- Valor Column -->
+      <ng-container matColumnDef="Valor">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Valor </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Valor"> {{row.Valor}} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
