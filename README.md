@@ -5,3 +5,5 @@ Entity Framework Core
 DDD  
 Mediator  
 Swagger  
+
+# Angular v8
