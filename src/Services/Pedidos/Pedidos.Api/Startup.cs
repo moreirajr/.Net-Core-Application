@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Pedidos.Application.Produtos.Queries.GetListaProdutos;
 using Pedidos.Infrastructure.IoC;
 
 namespace Pedidos.Api
@@ -63,6 +61,9 @@ namespace Pedidos.Api
     {
         public static IServiceCollection AddMvcConfiguration(this IServiceCollection services)
         {
+            services.AddMvc()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
             services.AddControllers();
 
             services.AddCors(options =>
@@ -100,7 +101,7 @@ namespace Pedidos.Api
         public static IServiceCollection AddMediatorConfiguration(this IServiceCollection services)
         {
             var pedidosApplicationAssembly = AppDomain.CurrentDomain.Load("Pedidos.Application");
-            
+
             services.AddMediatR(pedidosApplicationAssembly);
 
             return services;

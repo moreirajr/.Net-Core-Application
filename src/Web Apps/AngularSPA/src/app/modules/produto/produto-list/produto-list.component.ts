@@ -10,6 +10,8 @@ import {MatPaginator, MatSort, MatTableDataSource, MatTable} from '@angular/mate
   styleUrls: ['./produto-list.component.css']
 })
 export class ProdutoListComponent implements OnInit {
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   
   options = {
     timeOut: 3000,
@@ -18,35 +20,24 @@ export class ProdutoListComponent implements OnInit {
     clickToClose: true
   };
   
+  listaProdutos: Produto[];
   displayedColumns: string[] = ['Id', 'Descricao', 'Valor'];
-  dataSource: MatTableDataSource<Produto>;
-
-  teste: Produto[] = [
-    {Id: 1, Descricao: 'Produto A', Valor: 100 },
-    {Id: 2, Descricao: 'Produto B', Valor: 150 },
-  ];
-
+  dataSource: MatTableDataSource<Produto> = new MatTableDataSource<Produto>();
+  
   constructor(private produtoService: ProdutoService) {
-   }
+  }
 
   ngOnInit() {
-    this.produtoService.getProdutos()
-        .subscribe(data => 
-            {
-              //works
-              //this.dataSource = new MatTableDataSource(this.teste);
-                                    
-              this.dataSource = new MatTableDataSource(data);
-
-            });
+    this.produtoService.getProdutos().subscribe((data : Produto[]) => {
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
   
   ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
 }
