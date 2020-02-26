@@ -1,6 +1,6 @@
 <div class="example-header" fxLayout="row">
     <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      <input matInput placeholder="Produto">
     </mat-form-field>
   </div>
   
@@ -31,5 +31,9 @@
       </mat-row>
     </mat-table>
   
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator
+      [pageIndex]='paginatorOptions.PageIndex'
+      [pageSizeOptions]="paginatorOptions.PageSizeOptions"
+      (page)="onPageChange($event)">
+    </mat-paginator>
   </div>

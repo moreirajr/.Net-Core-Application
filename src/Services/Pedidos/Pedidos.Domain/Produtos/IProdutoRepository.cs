@@ -1,4 +1,5 @@
-﻿using Pedidos.Domain.SeedWork;
+﻿using Pedidos.Domain.Pagination;
+using Pedidos.Domain.SeedWork;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +16,7 @@ namespace Pedidos.Domain.Produtos
         Task<Produto> FindByIdAsync(int id);
 
         Task<IEnumerable<Produto>> FindAllAsync();
+
+        Task<PaginatedAggregateRootResult<Produto>> FindAllPaginatedAsync(PaginationOptions pagingOptions);
     }
 }

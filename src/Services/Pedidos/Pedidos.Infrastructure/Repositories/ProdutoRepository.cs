@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Pedidos.Domain.Pagination;
 using Pedidos.Domain.Produtos;
 using Pedidos.Domain.SeedWork;
 using Pedidos.Infrastructure.Database;
@@ -57,5 +58,25 @@ namespace Pedidos.Infrastructure.Repositories
 
             return produtos;
         }
+
+        public async Task<PaginatedAggregateRootResult<Produto>> FindAllPaginatedAsync(PaginationOptions pagingOptions)
+        {
+            var count = await _context.Produtos.AsNoTracking()
+                .LongCountAsync();
+
+            var produtos = await _context.Produtos.AsNoTracking()
+                .Skip((pagingOptions.PageIndex - 1) * pagingOptions.PageSize)
+                .Take(pagingOptions.PageSize)
+                .ToListAsync();
+
+            PaginatedAggregateRootResult<Produto> result = new PaginatedAggregateRootResult<Produto>(
+                produtos,
+                count,
+                pagingOptions.PageIndex,
+                pagingOptions.PageSize);
+
+            return result;
+        }
+
     }
 }

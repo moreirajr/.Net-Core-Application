@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Pedidos.Application.Pagination;
 using Pedidos.Application.Produtos.Commands.CreateProduto;
 using Pedidos.Application.Produtos.Commands.UpdateProduto;
 using Pedidos.Application.Produtos.Queries;
@@ -26,17 +27,18 @@ namespace Pedidos.Api.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ProdutoViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ListarProdutos()
+        [ProducesResponseType(typeof(PaginatedResult<ProdutoViewModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ListarProdutos([FromQuery] PaginationQueryParameters paginationParameters)
         {
-            var produtos = await _mediator.Send(new GetListaProdutosQuery());
+            var produtos = await _mediator.Send(new GetListaProdutosQuery(paginationParameters));
 
             return Ok(produtos);
         }
 
         [HttpGet("{id}")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(ProdutoViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterDetalhesProduto(int id)
         {
             if (id <= 0)
