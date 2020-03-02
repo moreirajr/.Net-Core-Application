@@ -16,11 +16,11 @@ namespace Pedidos.Application.Produtos.Commands.CreateProduto
 
         public async Task<bool> Handle(CreateProdutoCommand request, CancellationToken cancellationToken)
         {
-            var novoProduto = new Produto(request.Descricao, request.Valor);
+            var novoProduto = new Produto(request.Descricao, request.Valor, request.QuantidadeEstoque);
 
             await _produtoRepository.AddAsync(novoProduto);
 
-            return await _produtoRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken); ;
+            return await _produtoRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

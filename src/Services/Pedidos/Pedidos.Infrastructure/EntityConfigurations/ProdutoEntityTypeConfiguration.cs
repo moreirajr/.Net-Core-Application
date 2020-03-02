@@ -9,9 +9,10 @@ namespace Pedidos.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Produto> builder)
         {
-            builder.ToTable("Pedidos", PedidosContext.DEFAULT_SCHEMA);
+            builder.ToTable("Produto", PedidosContext.DEFAULT_SCHEMA);
 
             builder.HasKey(p => p.Id);
+            builder.Ignore(p => p.DomainEvents);
 
             builder.Property(p => p.Descricao)
                 .IsRequired()
@@ -20,6 +21,9 @@ namespace Pedidos.Infrastructure.EntityConfigurations
             builder.Property(p => p.Valor)
                 .IsRequired()
                 .HasColumnType("decimal(10,2)");
+
+            builder.Property(p => p.QuantidadeEstoque)
+                .IsRequired();
         }
     }
 }

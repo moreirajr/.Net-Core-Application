@@ -78,5 +78,17 @@ namespace Pedidos.Infrastructure.Repositories
             return result;
         }
 
+        public async Task<IEnumerable<Produto>> FindAllByIdAsync(params int[] ids)
+        {
+            if (ids == null || ids.Count() <= 0)
+                return null;
+
+            var produtos = await _context.Produtos
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            return produtos;
+        }
+
     }
 }

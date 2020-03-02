@@ -8,10 +8,13 @@ namespace Pedidos.Application.Produtos.Commands.CreateProduto
 
         public double Valor { get; }
 
+        public int QuantidadeEstoque { get; set; }
+
         public CreateProdutoCommand(CreateProdutoRequest request)
         {
             Descricao = request.Descricao;
             Valor = request.Valor;
+            QuantidadeEstoque = request.QuantidadeEstoque;
         }
     }
 }

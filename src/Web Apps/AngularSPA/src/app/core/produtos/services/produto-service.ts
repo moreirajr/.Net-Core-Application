@@ -4,7 +4,7 @@ import { Produto } from '../model/produto-model';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '../../pagination/paginated-result';
 
-const baseUrl = 'http://localhost:54014/api/v1/produto';
+const baseUrl = 'http://localhost:61244/pedido-api/v1/produto';
 
 @Injectable()
 export class ProdutoService {

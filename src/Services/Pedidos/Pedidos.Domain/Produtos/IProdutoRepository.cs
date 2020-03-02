@@ -14,6 +14,7 @@ namespace Pedidos.Domain.Produtos
 
         Produto FindById(int id);
         Task<Produto> FindByIdAsync(int id);
+        Task<IEnumerable<Produto>> FindAllByIdAsync(params int[] ids);
 
         Task<IEnumerable<Produto>> FindAllAsync();
 

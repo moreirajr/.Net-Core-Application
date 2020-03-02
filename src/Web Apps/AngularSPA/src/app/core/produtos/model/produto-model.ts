@@ -1,5 +1,6 @@
 export interface Produto {
     Id: number,
     Descricao: string,
-    Valor: number
+    Valor: number,
+    QuantidadeEstoque: number
   }

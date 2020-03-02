@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Pedidos\" />
+    <Folder Include="DomainEventHandlers\" />
+    <Folder Include="Pedidos\Validations\" />
+    <Folder Include="Pedidos\Queries\" />
     <Folder Include="Produtos\Commands\DeleteProduto\" />
     <Folder Include="Produtos\Validations\" />
   </ItemGroup>

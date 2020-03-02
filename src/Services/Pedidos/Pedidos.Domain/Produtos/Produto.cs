@@ -1,20 +1,24 @@
-﻿using Pedidos.Domain.SeedWork;
+﻿using Pedidos.Domain.Exceptions;
+using Pedidos.Domain.SeedWork;
 
 
 namespace Pedidos.Domain.Produtos
 {
-    public class Produto : IAggregateRoot
+    public class Produto : AEntity, IAggregateRoot
     {
-        public int Id { get; set; }
-
         public string Descricao { get; set; }
 
         public double Valor { get; set; }
 
-        public Produto(string descricao, double valor)
+        public int QuantidadeEstoque { get; set; }
+
+
+        public Produto() { }
+        public Produto(string descricao, double valor, int quantidadeEstoque)
         {
-            Descricao = descricao;
-            Valor = valor;
+            Descricao = !string.IsNullOrEmpty(descricao) ? descricao : throw new ProdutoDomainException(nameof(descricao));
+            Valor = valor > 0 ? valor : throw new ProdutoDomainException(nameof(valor));
+            QuantidadeEstoque = quantidadeEstoque > 0 ? quantidadeEstoque : throw new ProdutoDomainException(nameof(quantidadeEstoque));
         }
     }
 }
