@@ -6,9 +6,17 @@
 
   <ItemGroup>
     <Folder Include="DomainEventHandlers\" />
-    <Folder Include="Pagamentos\Commands\" />
+    <Folder Include="IntegrationEvents\" />
     <Folder Include="Pagamentos\Validations\" />
     <Folder Include="Pagamentos\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pagamentos.Domain\Pagamentos.Domain.csproj" />
   </ItemGroup>
 
 </Project>

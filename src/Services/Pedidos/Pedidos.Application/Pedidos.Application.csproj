@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Folder Include="DomainEventHandlers\" />
+    <Folder Include="IntegrationEvents\EventHandlers\" />
+    <Folder Include="IntegrationEvents\Events\" />
     <Folder Include="Pedidos\Validations\" />
     <Folder Include="Pedidos\Queries\" />
     <Folder Include="Produtos\Commands\DeleteProduto\" />
@@ -17,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Integration\EventBus.Integration.csproj" />
     <ProjectReference Include="..\Pedidos.Domain\Pedidos.Domain.csproj" />
   </ItemGroup>
 

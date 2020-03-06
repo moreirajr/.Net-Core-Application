@@ -6,6 +6,14 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="8.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+    <ProjectReference Include="..\Pagamentos.Application\Pagamentos.Application.csproj" />
+    <ProjectReference Include="..\Pagamentos.Infrastructure.Ioc\Pagamentos.Infrastructure.Ioc.csproj" />
   </ItemGroup>
 
 </Project>

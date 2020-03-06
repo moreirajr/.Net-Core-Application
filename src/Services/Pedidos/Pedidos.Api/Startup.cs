@@ -1,12 +1,17 @@
 using System;
+using EventBus.Integration;
+using EventBus.Integration.Abstractions;
+using EventBusRabbitMQ;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Pedidos.Infrastructure.IoC;
+using RabbitMQ.Client;
 
 namespace Pedidos.Api
 {
@@ -26,13 +31,22 @@ namespace Pedidos.Api
                 .AddEFConfiguration(Configuration)
                 .AddSwaggerConfiguration(Configuration)
                 .AddMediatorConfiguration()
+                .AddIntegrations(Configuration)
+                .AddEventBusConfiguration(Configuration)
                 .ConfigureDependencies();   //ApplicationModule
 
             //ApplicationModule.ConfigureDependencies(services);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var pathBase = Configuration["PATH_BASE"];
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{pathBase}'", pathBase);
+                app.UsePathBase(pathBase);
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,6 +68,15 @@ namespace Pedidos.Api
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pedidos.Api v1");
                 });
+
+            ConfigureEventBus(app);
+        }
+
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            //eventBus.Subscribe<PagamentoPedidoRealizadoIntegrationEvent, IIntegrationEventHandler<PagamentoPedidoRealizadoIntegrationEvent>>();        
         }
     }
 
@@ -103,6 +126,67 @@ namespace Pedidos.Api
             var pedidosApplicationAssembly = AppDomain.CurrentDomain.Load("Pedidos.Application");
 
             services.AddMediatR(pedidosApplicationAssembly);
+
+            return services;
+        }
+
+        public static IServiceCollection AddIntegrations(this IServiceCollection services, IConfiguration configuration)
+        {
+            //services.AddTransient<IPedidosIntegrationEventService, PedidosIntegrationEventService>();
+
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
+                {
+                    factory.UserName = configuration["EventBusUserName"];
+                }
+
+                if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
+                {
+                    factory.Password = configuration["EventBusPassword"];
+                }
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new DefaultRabbitMQPersistentConnection(logger, factory, retryCount);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddEventBusConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            var subscriptionClientName = configuration["SubscriptionClientName"];
+
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            {
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<IServiceScopeFactory>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new EventBusRabbitMQ.EventBusRabbitMQ(logger, rabbitMQPersistentConnection, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
+            });
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             return services;
         }

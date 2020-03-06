@@ -15,6 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Integration\EventBus.Integration.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
     <ProjectReference Include="..\Pedidos.Application\Pedidos.Application.csproj" />
     <ProjectReference Include="..\Pedidos.Infrastructure.IoC\Pedidos.Infrastructure.IoC.csproj" />
   </ItemGroup>
