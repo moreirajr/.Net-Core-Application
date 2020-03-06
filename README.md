@@ -5,5 +5,6 @@ Entity Framework Core
 DDD  
 Mediator  
 Swagger  
+Ocelot  
 
 # Angular v8
